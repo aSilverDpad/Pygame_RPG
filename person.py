@@ -1,11 +1,12 @@
 #!/usr/bin/python2.7
-
+#experimental
 import pygame
 import sys
 from pygame.locals import *
 from load_png import load_png
 import spritesheet
 from sprite_strip_anim import SpriteStripAnim
+from inventory import Inventory
 
 class Person(pygame.sprite.Sprite): # {{{1
     def __init__(self, name, type): # {{{2
@@ -16,7 +17,7 @@ class Person(pygame.sprite.Sprite): # {{{1
         self.armour = 0
         self.temperature = 36
         self.mana = 10
-        #TODO: self.inventory = list of items. create item class
+        self.inventory = Inventory()
         self.x = 0
         self.y = 0
 
@@ -51,9 +52,18 @@ class Person(pygame.sprite.Sprite): # {{{1
         print('Player pos: ')
         print('X: ', self.x, ' Y: ', self.y)
         return self.image
-    def get_death_animation(self):
+    def get_death_animation(self): #{{{2
         self.n = 3
         self.rect = (self.x,self.y,57,70)
         self.image = self.strips[self.n].next()
         return self.image
+    def pickup_item(self, item): #{{{2
+        item.x = self.x
+        item.y = self.y
+        self.inventory.add(item)
+    def use_item(self, item): #{{{2
+        if item.type == 'Potion':
+            if item.name == 'health_potion':
+                self.health += item.usage_value
+                self.inventory.remove(item)
 

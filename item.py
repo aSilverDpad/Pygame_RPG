@@ -9,8 +9,9 @@ class Item(pygame.sprite.Sprite):
         self.name = name
         self.type = type
         self.image = image
-        self.x = 0
-        self.y = 0
+        self.rect = self.image.get_rect()
+        self.x = random.randint(1,600) # position items in rand pos inside map
+        self.y = random.randint(1,350)
 class Weapon(Item): #{{{2
     def __init__(self, name, type, image, dmg_range, range, weapon_type):
         Item.__init__(self, name, type, image)
@@ -27,15 +28,14 @@ class Food(Item):
         Item.__init__(self, name, type, image)
         self.usage_value = value
 
-class Potion(Item):
-    def __init__(self, name, type, image, value):
-        Item.__init__(self, name, type, image)
-        self.usage_value = value
-        #TODO: have better way of identifying potion types etc.
-        #TODO: have an 'emptiness' value or different types. small medium etc
-
 class Tool(Item): # bombs, fishing_poles, shovels etc.
     def __init__(self, name, type, image, uses_left):
         Item.__init__(self, name, type, image)
         self.uses_left = uses_left # before the tool is destroyed
         self.valid_actions = 0 # list of actions the tool can do/use on
+
+class Potion(Item):
+    def __init__(self, name, type, image, value):
+        Item.__init__(self, name, type, image)
+        self.usage_value = value
+
